@@ -13,24 +13,19 @@
 </template>
 
 <script>
-import { getRecommend } from 'api/recommend'
-import { ERR_OK } from 'api/config'
-
 export default {
   name: 'recommend',
   created() {
-    this._getRecommend()
+    this.getBanner();
   },
   methods: {
-    _getRecommend() {
-      getRecommend().then((res) => {
-        if (res.code === ERR_OK) {
-          console.log(res.data.slider)
-        }
-      })
-    }
-  }
-}
+    getBanner() {
+      this.axios.get('/api/banner').then((res) => {
+        console.log(res.data);
+      });
+    },
+  },
+};
 </script>
 
 <style lang="stylus" scoped>
