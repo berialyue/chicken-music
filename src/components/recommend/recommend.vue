@@ -2,7 +2,26 @@
   <div>
     <div class="recommend">
       <div class="recommend-content">
-        <div class="slider-wrapper"></div>
+        <div v-if="banners.length" class="slider-wrapper">
+          <swiper
+            :options="swiperOption"
+            ref="mySwiper"
+            :mouseenter="stopPlay"
+            :mouseleave="play"
+          >
+            <!-- slides -->
+            <swiper-slide
+              v-for="(item, index) of banners"
+              :key="index"
+            >
+              <a :href="item.url">
+                <img :src="item.picUrl">
+              </a>
+            </swiper-slide>
+            <!-- Optional controls -->
+            <div class="swiper-pagination"  slot="pagination"></div>
+          </swiper>
+        </div>
         <div class="recommend-list">
           <h1 class="list-title">热门歌曲推荐</h1>
           <ul></ul>
@@ -13,24 +32,60 @@
 </template>
 
 <script>
+
 export default {
   name: 'recommend',
+  data() {
+    return {
+      banners: [],
+      swiperOption: {
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true
+        },
+        autoplay: {
+          delay: 1000,
+          disableOnInteraction: false
+        },
+        loop: true
+      }
+    }
+  },
   created() {
-    this.getBanner();
+    this.getBanner()
+  },
+  computed: {
+    swiper() {
+      return this.$refs.mySwiper.swiper
+    }
   },
   methods: {
     getBanner() {
       this.axios.get('/api/banner').then((res) => {
-        console.log(res.data);
-      });
+        if (res.data.code === 200) {
+          console.log(res)
+          console.log(res.data)
+          console.log(res.data.banners)
+          this.banners = res.data.banners
+        }
+      })
     },
-  },
-};
+    stopPlay() {
+      this.swiper.el.onmouseover = function() {
+        this.swiperOption.autoplay.stop()
+      }
+    },
+    play() {
+      this.swiper.startAutoplay()
+    }
+  }
+}
 </script>
 
 <style lang="stylus" scoped>
   @import "~common/stylus/variable"
-
+  .slider-wrapper >>> .swiper-pagination-bullet-active
+    background: #ffffff
   .recommend
     position: fixed
     width: 100%
@@ -42,7 +97,17 @@ export default {
       .slider-wrapper
         position: relative
         width: 100%
+        height: 0
+        padding-bottom: 46%
         overflow: hidden
+        a
+          display: block
+          width: 100%
+          overflow: hidden
+          text-decoration: none
+        img
+          display: block
+          width: 100%
       .recommend-list
         .list-title
           height: 65px
@@ -77,4 +142,6 @@ export default {
         width: 100%
         top: 50%
         transform: translateY(-50%)
+.img
+ width: 100%
 </style>

@@ -6,8 +6,8 @@
 
 <script>
 export default {
-  name: 'rank',
-};
+  name: 'rank'
+}
 </script>
 
 <style lang="stylus" scoped>

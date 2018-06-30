@@ -1,37 +1,37 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import Recommend from 'components/recommend/recommend';
-import Rank from 'components/rank/rank';
-import Search from 'components/search/search';
-import Singer from 'components/singer/singer';
+import Vue from 'vue'
+import Router from 'vue-router'
+import Recommend from 'components/recommend/recommend'
+import Rank from 'components/rank/rank'
+import Search from 'components/search/search'
+import Singer from 'components/singer/singer'
 
-Vue.use(Router);
+Vue.use(Router)
 
 export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/recommend',
+      redirect: '/recommend'
     },
     {
       path: '/recommend',
       name: Recommend,
-      component: Recommend,
+      component: Recommend
     },
     {
       path: '/rank',
       name: Rank,
-      component: Rank,
+      component: Rank
     },
     {
       path: '/search',
       name: Search,
-      component: Search,
+      component: Search
     },
     {
       path: '/singer',
       name: Singer,
-      component: Singer,
-    },
-  ],
-});
+      component: Singer
+    }
+  ]
+})
