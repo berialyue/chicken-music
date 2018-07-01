@@ -1,31 +1,29 @@
 <template>
-  <div>
-    <div class="recommend">
-      <div class="recommend-content">
-        <div v-if="banners.length" class="slider-wrapper">
-          <swiper
-            :options="swiperOption"
-            ref="mySwiper"
-            :mouseenter="stopPlay"
-            :mouseleave="play"
+  <div class="recommend">
+    <div class="recommend-content">
+      <div v-if="banners.length" class="slider-wrapper">
+        <swiper
+          :options="swiperOption"
+          ref="mySwiper"
+          :mouseenter="stopPlay"
+          :mouseleave="play"
+        >
+          <!-- slides -->
+          <swiper-slide
+            v-for="(item, index) of banners"
+            :key="index"
           >
-            <!-- slides -->
-            <swiper-slide
-              v-for="(item, index) of banners"
-              :key="index"
-            >
-              <a :href="item.url">
-                <img :src="item.picUrl">
-              </a>
-            </swiper-slide>
-            <!-- Optional controls -->
-            <div class="swiper-pagination"  slot="pagination"></div>
-          </swiper>
-        </div>
-        <div class="recommend-list">
-          <h1 class="list-title">热门歌曲推荐</h1>
-          <ul></ul>
-        </div>
+            <a :href="item.url">
+              <img :src="item.picUrl">
+            </a>
+          </swiper-slide>
+          <!-- Optional controls -->
+          <div class="swiper-pagination"  slot="pagination"></div>
+        </swiper>
+      </div>
+      <div class="recommend-list">
+        <h1 class="list-title">热门歌曲推荐</h1>
+        <ul></ul>
       </div>
     </div>
   </div>
