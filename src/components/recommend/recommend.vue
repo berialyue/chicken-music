@@ -5,8 +5,6 @@
         <swiper
           :options="swiperOption"
           ref="mySwiper"
-          :mouseenter="stopPlay"
-          :mouseleave="play"
         >
           <!-- slides -->
           <swiper-slide
@@ -21,15 +19,30 @@
           <div class="swiper-pagination"  slot="pagination"></div>
         </swiper>
       </div>
+      <!-- <button
+        class="button"
+        @click="startPlay"
+      >开始</button> -->
+      <!-- <button class="button" @click="stopPlay">停止</button> -->
       <div class="recommend-list">
         <h1 class="list-title">热门歌曲推荐</h1>
-        <ul></ul>
+        <ul>
+          <li v-for="(item,index) in playList" :key="index" class="item">
+            <div class="icon">
+              <img :src="item.coverImgUrl" width="60" height="60">
+            </div>
+            <div class="text">
+              <h2 class="name" v-html="item.name"></h2>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import api from '../../api/recommend.js'
 
 export default {
   name: 'recommend',
@@ -37,20 +50,25 @@ export default {
     return {
       banners: [],
       swiperOption: {
+        notNextTick: true,
         pagination: {
           el: '.swiper-pagination',
           clickable: true
         },
         autoplay: {
-          delay: 1000,
+          delay: 3000,
           disableOnInteraction: false
         },
-        loop: true
-      }
+        loop: true,
+        observeParents: true
+      },
+      playList: []
     }
   },
   created() {
     this.getBanner()
+    this.getPersonalized()
+    this.getPlayList()
   },
   computed: {
     swiper() {
@@ -59,22 +77,28 @@ export default {
   },
   methods: {
     getBanner() {
-      this.axios.get('/api/banner').then((res) => {
+      api.getBannerResource().then((res) => {
         if (res.data.code === 200) {
-          console.log(res)
-          console.log(res.data)
-          console.log(res.data.banners)
           this.banners = res.data.banners
         }
       })
     },
-    stopPlay() {
-      this.swiper.el.onmouseover = function() {
-        this.swiperOption.autoplay.stop()
-      }
+    getPersonalized() {
+      api.getPersonalizedResource().then((res) => {
+        if (res.data.code === 200) {
+          console.log(res)
+          console.log(res.data)
+        }
+      })
     },
-    play() {
-      this.swiper.startAutoplay()
+    getPlayList() {
+      api.getPlayList(10, 'new').then((res) => {
+        if (res.data.code === 200) {
+          console.log(res)
+          console.log(res.data)
+          this.playList = res.data.playlists
+        }
+      })
     }
   }
 }
@@ -142,4 +166,7 @@ export default {
         transform: translateY(-50%)
 .img
  width: 100%
+.button
+  background: #ffffff
+  color:#000
 </style>
