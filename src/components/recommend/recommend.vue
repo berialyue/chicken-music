@@ -1,48 +1,49 @@
 <template>
   <div class="recommend">
-    <div class="recommend-content">
-      <div v-if="banners.length" class="slider-wrapper">
-        <swiper
-          :options="swiperOption"
-          ref="mySwiper"
-        >
-          <!-- slides -->
-          <swiper-slide
-            v-for="(item, index) of banners"
-            :key="index"
-          >
-            <a :href="item.url">
-              <img :src="item.picUrl">
-            </a>
-          </swiper-slide>
-          <!-- Optional controls -->
-          <div class="swiper-pagination"  slot="pagination"></div>
-        </swiper>
+    <scroll refs="scroll" class="recommend-content" :data="playList">
+      <div>
+        <div v-if="banners.length" class="slider-wrapper">
+          <swiper
+            :options="swiperOption"
+            ref="mySwiper">
+            <!-- slides -->
+            <swiper-slide
+              v-for="(item, index) of banners"
+              :key="index">
+              <a :href="item.url">
+                <img @load="loadImage" :src="item.picUrl">
+              </a>
+            </swiper-slide>
+            <!-- Optional controls -->
+            <div class="swiper-pagination"  slot="pagination"></div>
+          </swiper>
+        </div>
+        <!-- <button
+          class="button"
+          @click="startPlay"
+        >开始</button> -->
+        <!-- <button class="button" @click="stopPlay">停止</button> -->
+        <div class="recommend-list">
+          <h1 class="list-title">热门歌单推荐</h1>
+          <ul>
+            <li v-for="(item,index) in playList" :key="index" class="item">
+              <div class="icon">
+                <img :src="item.coverImgUrl" width="60" height="60">
+              </div>
+              <div class="text">
+                <h2 class="name" v-html="item.name"></h2>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
-      <!-- <button
-        class="button"
-        @click="startPlay"
-      >开始</button> -->
-      <!-- <button class="button" @click="stopPlay">停止</button> -->
-      <div class="recommend-list">
-        <h1 class="list-title">热门歌曲推荐</h1>
-        <ul>
-          <li v-for="(item,index) in playList" :key="index" class="item">
-            <div class="icon">
-              <img :src="item.coverImgUrl" width="60" height="60">
-            </div>
-            <div class="text">
-              <h2 class="name" v-html="item.name"></h2>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
+    </scroll>
   </div>
 </template>
 
 <script>
 import api from '../../api/recommend.js'
+import Scroll from '../../base/scroll/scroll'
 
 export default {
   name: 'recommend',
@@ -62,8 +63,12 @@ export default {
         loop: true,
         observeParents: true
       },
-      playList: []
+      playList: [],
+      checkLoaded: false
     }
+  },
+  components: {
+    Scroll
   },
   created() {
     this.getBanner()
@@ -99,6 +104,12 @@ export default {
           this.playList = res.data.playlists
         }
       })
+    },
+    loadImage() {
+      if (!this.checkLoaded) {
+        this.$refs.scroll.refresh()
+        this.checkLoaded = true
+      }
     }
   }
 }
