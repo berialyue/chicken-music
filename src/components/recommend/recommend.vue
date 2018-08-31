@@ -11,7 +11,7 @@
               v-for="(item, index) of banners"
               :key="index">
               <a :href="item.url">
-                <img @load="loadImage" :src="item.picUrl">
+                <img class="needsclick" @load="loadImage" :src="item.picUrl">
               </a>
             </swiper-slide>
             <!-- Optional controls -->
@@ -28,7 +28,7 @@
           <ul>
             <li v-for="(item,index) in playList" :key="index" class="item">
               <div class="icon">
-                <img :src="item.coverImgUrl" width="60" height="60">
+                <img v-lazy="item.coverImgUrl" width="60" height="60">
               </div>
               <div class="text">
                 <h2 class="name" v-html="item.name"></h2>
