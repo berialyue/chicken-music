@@ -32,7 +32,7 @@ export default {
         return undefined
       }
       this.scroll = new BScroll(this.$refs.wrapper, {
-        probeType: this.wrapper,
+        probeType: this.probeType,
         click: this.click
       })
     },
