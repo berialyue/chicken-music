@@ -37,6 +37,9 @@
           </ul>
         </div>
       </div>
+      <div class="loading-container" v-show="!playList.length">
+        <loading></loading>
+      </div>
     </scroll>
   </div>
 </template>
@@ -44,6 +47,7 @@
 <script>
 import api from '../../api/recommend.js'
 import Scroll from '../../base/scroll/scroll'
+import Loading from '../../base/loading/loading'
 
 export default {
   name: 'recommend',
@@ -68,7 +72,8 @@ export default {
     }
   },
   components: {
-    Scroll
+    Scroll,
+    Loading
   },
   created() {
     this.getBanner()
