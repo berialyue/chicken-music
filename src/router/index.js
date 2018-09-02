@@ -15,23 +15,27 @@ export default new Router({
     },
     {
       path: '/recommend',
-      name: Recommend,
+      name: 'Recommend',
       component: Recommend
     },
     {
       path: '/rank',
-      name: Rank,
+      name: 'Rank',
       component: Rank
     },
     {
       path: '/search',
-      name: Search,
+      name: 'Search',
       component: Search
     },
     {
       path: '/singer',
-      name: Singer,
-      component: Singer
+      name: 'Singer',
+      component: Singer,
+      children: [{
+        path: 'chinesemale',
+        name: 'chineseMale'
+      }]
     }
   ]
 })
