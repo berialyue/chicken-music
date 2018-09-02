@@ -1,12 +1,16 @@
 <template>
   <div>
-    歌手页面
+    <div class="classify">歌手分类</div>
+    <router-view>
+
+    </router-view>
   </div>
 </template>
 
 <script>
 export default {
   name: 'singer'
+
 }
 </script>
 

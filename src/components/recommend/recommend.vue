@@ -1,6 +1,6 @@
 <template>
   <div class="recommend">
-    <scroll refs="scroll" class="recommend-content" :data="playList">
+    <scroll ref="scroll" class="recommend-content" :data="playList">
       <div>
         <div v-if="banners.length" class="slider-wrapper">
           <swiper
