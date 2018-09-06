@@ -1,7 +1,6 @@
 <template>
   <div class="singerItem">
-    <div>{{cat}}</div>
-    <div>{{limit}}</div>
+    <list-view :data="singers"></list-view>
   </div>
 </template>
 
@@ -9,6 +8,7 @@
 import api from '../../../api/singer.js'
 import Singer from 'common/js/singer'
 import getFirstLetter from 'common/js/pinyin.js'
+import listView from 'base/listView/listView'
 
 const HOT_NAME = '热门'
 const OTHER_NAME = '其他'
@@ -29,6 +29,9 @@ export default {
       type: Number
     }
   },
+  components: {
+    listView
+  },
   created() {
     this.getSingerList()
   },
@@ -36,9 +39,7 @@ export default {
     getSingerList() {
       api.getSingerList(this.cat, this.limit).then((res) => {
         if (res.data.code === 200) {
-          this.singers = res.data.artists
-          console.log(this.singers)
-          console.log(this.normalizeSinger(this.singers))
+          this.singers = this.normalizeSinger(res.data.artists)
         }
       })
     },
@@ -96,13 +97,16 @@ export default {
       ret.sort((a, b) => {
         return a.title.charCodeAt(0) - b.title.charCodeAt(0)
       })
-      ret.forEach((item, index) => {
+      this.sortListContent(ret)
+      this.sortListContent(other)
+      return hot.concat(ret, other)
+    },
+    sortListContent(list) {
+      list.forEach((item, index) => {
         item.items.sort((a, b) => {
           return a.name.charCodeAt(0) - b.name.charCodeAt(0)
         })
       })
-      console.log(ret)
-      return hot.concat(ret, other)
     }
   }
 }
