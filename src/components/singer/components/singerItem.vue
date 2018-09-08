@@ -7,8 +7,8 @@
 <script>
 import api from '../../../api/singer.js'
 import Singer from 'common/js/singer'
-import getFirstLetter from 'common/js/pinyin.js'
-import listView from 'base/listView/listView'
+import getFirstLetter from 'common/js/getFirstLetter.js'
+import ListView from 'base/listView/listView'
 
 const HOT_NAME = '热门'
 const OTHER_NAME = '其他'
@@ -21,6 +21,9 @@ export default {
       singers: []
     }
   },
+  components: {
+    ListView
+  },
   props: {
     cat: {
       type: Number
@@ -28,9 +31,6 @@ export default {
     limit: {
       type: Number
     }
-  },
-  components: {
-    listView
   },
   created() {
     this.getSingerList()
