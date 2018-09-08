@@ -11,11 +11,15 @@
         </ul>
       </li>
     </ul>
+    <div class="loading-container" v-show="data.length === 0">
+        <loading></loading>
+    </div>
   </scroll>
 </template>
 
 <script>
 import Scroll from 'base/scroll/scroll'
+import Loading from '../loading/loading'
 
 export default {
   name: 'listView',
@@ -26,7 +30,8 @@ export default {
     }
   },
   components: {
-    Scroll
+    Scroll,
+    Loading
   }
 }
 </script>
@@ -35,8 +40,8 @@ export default {
 @import "~common/stylus/variable"
 
 .listView
-  // position: relative
-  height: 100%
+  position: relative
+  height: 100vh
   width: 100%
   overflow: hidden
   background: $color-background
@@ -61,5 +66,10 @@ export default {
   margin-left: 20px
   color: $color-text-l
   font-size: $font-size-medium
+.loading-container
+  position: absolute
+  width: 100%
+  top: 35%
+  transform: translateY(-50%)
 
 </style>

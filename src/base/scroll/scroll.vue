@@ -31,10 +31,22 @@ export default {
       if (!this.$refs.wrapper) {
         return undefined
       }
-      this.scroll = new BScroll(this.$refs.wrapper, {
-        probeType: this.probeType,
-        click: this.click
+      this.$nextTick(() => {
+        if (!this.scroll) {
+          this.scroll = new BScroll(this.$refs.wrapper, {
+            probeType: this.probeType,
+            click: this.click
+          })
+        } else {
+          this.scroll.refresh()
+        }
       })
+      // this.$nextTick(() => {
+      //   this.scroll = new BScroll(this.$refs.wrapper, {
+      //     probeType: this.probeType,
+      //     click: this.click
+      //   })
+      // })
     },
     enable() {
       this.scroll && this.scroll.enable()
