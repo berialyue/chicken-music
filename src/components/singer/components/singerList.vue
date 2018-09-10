@@ -1,45 +1,32 @@
 <template>
   <div class="singerList">
-    <div class="singer-classify">
-      <router-link to="/singer/chinesemale" class="singer-item" @click.native="setSingerType('chinesemale')">华语男歌手</router-link>
-      <router-link to="/singer/chinesefemale" class="singer-item" @click.native="setSingerType('chinesefemale')">华语女歌手</router-link>
-      <router-link to="/singer/chineseband" class="singer-item" @click.native="setSingerType('chineseband')">华语乐队/组合</router-link>
-    </div>
-    <div class="singer-classify">
-      <router-link to="/singer/occidentmale" class="singer-item" @click.native="setSingerType('occidentmale')">欧美男歌手</router-link>
-      <router-link to="/singer/occidentfemale" class="singer-item" @click.native="setSingerType('occidentfemale')">欧美女歌手</router-link>
-      <router-link to="/singer/occidentband" class="singer-item" @click.native="setSingerType('occidentband')">欧美乐队/组合</router-link>
-    </div>
-    <div class="singer-classify">
-      <router-link to="/singer/japanesemale" class="singer-item" @click.native="setSingerType('japanesemale')">日本男歌手</router-link>
-      <router-link to="/singer/japanesefemale" class="singer-item" @click.native="setSingerType('japanesefemale')">日本女歌手</router-link>
-      <router-link to="/singer/japaneseband" class="singer-item" @click.native="setSingerType('japaneseband')">日本乐队/组合</router-link>
-    </div>
-    <div class="singer-classify">
-      <router-link to="/singer/koreamale" class="singer-item" @click.native="setSingerType('koreamale')">韩国男歌手</router-link>
-      <router-link to="/singer/koreafemale" class="singer-item" @click.native="setSingerType('koreafemale')">韩国女歌手</router-link>
-      <router-link to="/singer/koreaband" class="singer-item" @click.native="setSingerType('koreaband')">韩国乐队/组合</router-link>
-    </div>
-    <div class="singer-classify">
-      <router-link to="/singer/othermale" class="singer-item" @click.native="setSingerType('othermale')">其他男歌手</router-link>
-      <router-link to="/singer/otherfemale" class="singer-item" @click.native="setSingerType('otherfemale')">其他女歌手</router-link>
-      <router-link to="/singer/otherband" class="singer-item" @click.native="setSingerType('otherband')">其他乐队/组合</router-link>
-    </div>
+    <singer-item :cat="1001" :limit="100" v-if="singerType === 'chinesemale'"></singer-item>
+    <singer-item :cat="1002" :limit="100" v-if="singerType === 'chinesefemale'"></singer-item>
+    <singer-item :cat="1003" :limit="100" v-if="singerType === 'chineseband'"></singer-item>
+    <singer-item :cat="2001" :limit="100" v-if="singerType === 'occidentmale'"></singer-item>
+    <singer-item :cat="2002" :limit="100" v-if="singerType === 'occidentfemale'"></singer-item>
+    <singer-item :cat="2003" :limit="100" v-if="singerType === 'occidentband'"></singer-item>
+    <singer-item :cat="6001" :limit="100" v-if="singerType === 'japanesemale'"></singer-item>
+    <singer-item :cat="6002" :limit="100" v-if="singerType === 'japanesefemale'"></singer-item>
+    <singer-item :cat="6003" :limit="100" v-if="singerType === 'japaneseband'"></singer-item>
+    <singer-item :cat="7001" :limit="100" v-if="singerType === 'koreamale'"></singer-item>
+    <singer-item :cat="7002" :limit="100" v-if="singerType === 'koreafemale'"></singer-item>
+    <singer-item :cat="7003" :limit="100" v-if="singerType === 'koreaband'"></singer-item>
+    <singer-item :cat="4001" :limit="100" v-if="singerType === 'othermale'"></singer-item>
+    <singer-item :cat="4002" :limit="100" v-if="singerType === 'otherfemale'"></singer-item>
+    <singer-item :cat="4003" :limit="100" v-if="singerType === 'otherband'"></singer-item>
   </div>
 </template>
 
 <script>
 import singerItem from './singerItem'
+import store from '../../../store'
 
 export default {
   name: 'singerList',
-  methods: {
-    clickTo(add) {
-      this.$router.push(add)
-    },
-    setSingerType(singerType) {
-      console.log('singertype')
-      return this.$store.commit('SET_SINGERTYPE', singerType)
+  data() {
+    return {
+      singerType: store.getters.singerType
     }
   },
   components: {
@@ -49,21 +36,11 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import "~common/stylus/variable"
-.singerList
-  height: calc( 100vh - 110px)
-.singer-classify
-  display: flex
-  flex-direction: column
-  margin: 10px 0
-.singer-item
-  margin-bottom: 2px
-  // padding-left: 20px
-  height: 40px
-  line-height: 40px
-  background-color: rgba(255,255,255,0.1)
-  color: $color-theme
-  text-align: center
-.singer-item:active
-  background-color: rgba(255,255,255,0.4)
+ @import "~common/stylus/variable"
+  .title
+    padding: 10px 0
+    text-align: center
+    color: $color-theme
+    font-size: $font-size-medium
 </style>
+

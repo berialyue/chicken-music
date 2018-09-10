@@ -1,6 +1,7 @@
 <template>
   <div class="singerItem">
-    <list-view :data="singers"></list-view>
+    <list-view @select="selectSinger" :data="singers"></list-view>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -36,6 +37,11 @@ export default {
     this.getSingerList()
   },
   methods: {
+    selectSinger(singer) {
+      this.$router.push({
+        path: `/singer/list/${singer.id}`
+      })
+    },
     getSingerList() {
       api.getSingerList(this.cat, this.limit).then((res) => {
         if (res.data.code === 200) {
