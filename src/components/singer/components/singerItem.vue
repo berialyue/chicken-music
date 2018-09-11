@@ -1,6 +1,7 @@
 <template>
   <div class="singerItem">
-    <list-view :data="singers"></list-view>
+    <list-view @select="selectSinger" :data="singers"></list-view>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -9,6 +10,7 @@ import api from '../../../api/singer.js'
 import Singer from 'common/js/singer'
 import getFirstLetter from 'common/js/getFirstLetter.js'
 import ListView from 'base/listView/listView'
+import { mapMutations } from 'vuex'
 
 const HOT_NAME = '热门'
 const OTHER_NAME = '其他'
@@ -36,6 +38,12 @@ export default {
     this.getSingerList()
   },
   methods: {
+    selectSinger(singer) {
+      this.$router.push({
+        path: `/singer/list/${singer.id}`
+      })
+      this.setSinger(singer)
+    },
     getSingerList() {
       api.getSingerList(this.cat, this.limit).then((res) => {
         if (res.data.code === 200) {
@@ -107,7 +115,10 @@ export default {
           return a.name.charCodeAt(0) - b.name.charCodeAt(0)
         })
       })
-    }
+    },
+    ...mapMutations({
+      setSinger: 'SET_SINGERS'
+    })
   }
 }
 </script>
