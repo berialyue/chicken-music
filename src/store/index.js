@@ -2,14 +2,19 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import singer from './modules/singer'
 import getters from './getters'
+import createLogger from 'vuex/dist/logger'
 
 Vue.use(Vuex)
+
+const debug = process.env.NODE_ENV !== 'production'
 
 const store = new Vuex.Store({
   modules: {
     singer
   },
-  getters
+  getters,
+  strict: debug,
+  plugins: debug ? [createLogger()] : []
 })
 
 export default store

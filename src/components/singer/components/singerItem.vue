@@ -10,6 +10,7 @@ import api from '../../../api/singer.js'
 import Singer from 'common/js/singer'
 import getFirstLetter from 'common/js/getFirstLetter.js'
 import ListView from 'base/listView/listView'
+import { mapMutations } from 'vuex'
 
 const HOT_NAME = '热门'
 const OTHER_NAME = '其他'
@@ -41,6 +42,7 @@ export default {
       this.$router.push({
         path: `/singer/list/${singer.id}`
       })
+      this.setSinger(singer)
     },
     getSingerList() {
       api.getSingerList(this.cat, this.limit).then((res) => {
@@ -113,7 +115,10 @@ export default {
           return a.name.charCodeAt(0) - b.name.charCodeAt(0)
         })
       })
-    }
+    },
+    ...mapMutations({
+      setSinger: 'SET_SINGERS'
+    })
   }
 }
 </script>
