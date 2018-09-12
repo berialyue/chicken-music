@@ -8,6 +8,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import api from 'api/singer.js'
+
 export default {
   name: 'singerDetail',
   computed: {
@@ -16,7 +18,22 @@ export default {
     ])
   },
   created() {
-    console.log(this.singers)
+    console.log(this.singers.id)
+    this.getSingerDetail()
+  },
+  methods: {
+    getSingerDetail() {
+      if (!this.singers.id) {
+        this.$router.push('/singer/list')
+        return
+      }
+      api.getSingerDetail(this.singers.id).then((res) => {
+        console.log(res.data)
+        if (res.data.code === 200) {
+          console.log('success')
+        }
+      })
+    }
   }
 }
 </script>

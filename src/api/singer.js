@@ -8,5 +8,12 @@ export default {
         limit: limit
       }
     })
+  },
+  getSingerDetail(singerId) {
+    return axios.get('/api/artists', {
+      params: {
+        id: singerId
+      }
+    })
   }
 }
