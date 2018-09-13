@@ -51,14 +51,13 @@ export default {
 <style lang="stylus" scoped>
 @import "~common/stylus/variable"
 .singerClassify
-  height: calc( 100vh - 110px)
+  height: calc(100vh - 88px)
 .singer-classify
   display: flex
   flex-direction: column
   margin: 10px 0
 .singer-item
   margin-bottom: 2px
-  // padding-left: 20px
   height: 40px
   line-height: 40px
   background-color: rgba(255,255,255,0.1)

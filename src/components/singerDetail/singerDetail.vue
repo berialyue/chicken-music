@@ -1,18 +1,30 @@
 <template>
   <transition name="slide">
-    <div class="singerDetail">
-      singerDetail
-    </div>
+    <music-list :songs="songs" :title="title" :bgImage="bgImage"></music-list>
   </transition>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import api from 'api/singer.js'
+import api from 'api/singer'
+import { createSong } from 'common/js/song'
+import musicList from 'components/musicList/musicList'
 
 export default {
   name: 'singerDetail',
+  data() {
+    return {
+      songs: [],
+      songUrl: ''
+    }
+  },
   computed: {
+    title() {
+      return this.singers.name
+    },
+    bgImage() {
+      return this.singers.avatar
+    },
     ...mapGetters([
       'singers'
     ])
@@ -30,25 +42,37 @@ export default {
       api.getSingerDetail(this.singers.id).then((res) => {
         console.log(res.data)
         if (res.data.code === 200) {
-          console.log('success')
+          this.songs = this.normalizeSongs(res.data.hotSongs)
         }
       })
+    },
+    getSongUrl(songId) {
+      return api.getSongUrl(songId)
+    },
+    normalizeSongs(list) {
+      console.log(list)
+      let ret = []
+      list.forEach((item) => {
+        if (item.id) {
+          this.getSongUrl(item.id).then(res => {
+            if (res.data.code === 200) {
+              this.songUrl = res.data.data[0].url
+            }
+            ret.push(createSong(item, this.songUrl))
+          })
+        }
+      })
+      console.log(ret)
+      return ret
     }
+  },
+  components: {
+    musicList
   }
 }
 </script>
 
 <style lang="stylus" scoped>
-@import '~common/stylus/variable'
-
-.singerDetail
-  position: fixed
-  z-index: 99
-  top: 0
-  left: 0
-  right: 0
-  bottom: 0
-  background: $color-background
 .slide-enter-active,.slide-leave-active
   transition: all 0.3s
 .slide-enter, .slide-leave-to

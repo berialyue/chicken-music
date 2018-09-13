@@ -185,7 +185,7 @@ export default {
 
 .listView
   position: relative
-  height: 100vh
+  height: calc(100vh - 88px)
   width: 100%
   overflow: hidden
   background: $color-background
