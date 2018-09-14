@@ -50,8 +50,8 @@ export default {
 
 <style lang="stylus" scoped>
 @import "~common/stylus/variable"
-.singerClassify
-  height: calc(100vh - 88px)
+// .singerClassify
+//   height: 100%
 .singer-classify
   display: flex
   flex-direction: column
