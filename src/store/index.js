@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import singer from './modules/singer'
+import play from './modules/play'
 import getters from './getters'
 import createLogger from 'vuex/dist/logger'
 
@@ -10,7 +11,8 @@ const debug = process.env.NODE_ENV !== 'production'
 
 const store = new Vuex.Store({
   modules: {
-    singer
+    singer,
+    play
   },
   getters,
   strict: debug,
