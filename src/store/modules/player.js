@@ -1,6 +1,6 @@
 import { playMode } from 'common/js/config'
 
-const play = {
+const player = {
   state: {
     playing: false,
     fullScreen: false,
@@ -30,8 +30,14 @@ const play = {
     }
   },
   actions: {
-
+    selectPlay({commit, state}, {list, index}) {
+      commit('SET_SEQUENCE_LIST', list)
+      commit('SET_PLAYLIST', list)
+      commit('SET_CURRENT_INDEX', index)
+      commit('SET_FULL_SCREEN', true)
+      commit('SET_PLAYING_STATE', true)
+    }
   }
 }
 
-export default play
+export default player
