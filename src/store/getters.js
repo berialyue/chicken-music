@@ -1,14 +1,14 @@
 const getters = {
   singerType: state => state.singer.singerType,
   singers: state => state.singer.singers,
-  playing: state => state.play.playing,
-  fullScreen: state => state.play.fullScreen,
-  playList: state => state.play.playList,
-  sequenceList: state => state.play.sequenceList,
-  mode: state => state.play.mode,
-  currentIndex: state => state.play.currentIndex,
+  playing: state => state.player.playing,
+  fullScreen: state => state.player.fullScreen,
+  playList: state => state.player.playList,
+  sequenceList: state => state.player.sequenceList,
+  mode: state => state.player.mode,
+  currentIndex: state => state.player.currentIndex,
   currentSong: (state) => {
-    return state.play.playList[state.play.currentIndex] || {}
+    return state.player.playList[state.player.currentIndex] || {}
   }
 }
 export default getters

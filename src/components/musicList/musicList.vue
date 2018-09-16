@@ -23,7 +23,7 @@
       ref="list"
     >
       <div class="song-list-wrapper">
-        <song-list :songs="songs"></song-list>
+        <song-list @select="selectItem" :songs="songs"></song-list>
       </div>
       <div class="loading-container" v-show="!songs.length">
         <loading></loading>
@@ -84,6 +84,12 @@ export default {
     },
     back() {
       this.$router.back()
+    },
+    selectItem(item, index) {
+      this.$store.dispatch('selectPlay', {
+        list: this.songs,
+        index
+      })
     }
   },
   watch: {
