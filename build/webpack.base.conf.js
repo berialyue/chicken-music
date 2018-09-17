@@ -60,6 +60,15 @@ module.exports = {
         include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
       },
       {
+        test: /\.stylus$/,
+        use: [
+          'style-loader',
+          {loader: 'css-loader',options: {importLoaders: 2}},  //2代表css-loader后还需要几个loader
+          {loader: 'postcss-loader',options:{plugins:[require("autoprefixer")("last 10 versions")]}},
+          'stylus-loader'
+         ]
+      },
+      {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {

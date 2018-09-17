@@ -15,11 +15,11 @@
       <router-link to="/singer/list" class="singer-item" @click.native="setSingerType('japanesefemale')">日本女歌手</router-link>
       <router-link to="/singer/list" class="singer-item" @click.native="setSingerType('japaneseband')">日本乐队/组合</router-link>
     </div>
-    <div class="singer-classify">
+    <!-- <div class="singer-classify">
       <router-link to="/singer/list" class="singer-item" @click.native="setSingerType('koreamale')">韩国男歌手</router-link>
       <router-link to="/singer/list" class="singer-item" @click.native="setSingerType('koreafemale')">韩国女歌手</router-link>
       <router-link to="/singer/list" class="singer-item" @click.native="setSingerType('koreaband')">韩国乐队/组合</router-link>
-    </div>
+    </div> -->
     <div class="singer-classify">
       <router-link to="/singer/list" class="singer-item" @click.native="setSingerType('othermale')">其他男歌手</router-link>
       <router-link to="/singer/list" class="singer-item" @click.native="setSingerType('otherfemale')">其他女歌手</router-link>
