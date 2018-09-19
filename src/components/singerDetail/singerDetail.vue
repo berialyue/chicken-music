@@ -53,16 +53,16 @@ export default {
       console.log(list)
       let ret = []
       list.forEach((item) => {
-        if (item.id) {
-          this.getSongUrl(item.id).then(res => {
-            if (res.data.code === 200) {
-              this.songUrl = res.data.data[0].url
-            }
-            ret.push(createSong(item, this.songUrl))
-          })
-        }
+        ret.push(createSong(item))
       })
       console.log(ret)
+      ret.forEach((item) => {
+        this.getSongUrl(item.id).then(res => {
+          if (res.data.code === 200) {
+            item.url = res.data.data[0].url
+          }
+        })
+      })
       return ret
     }
   },
