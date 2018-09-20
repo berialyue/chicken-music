@@ -46,8 +46,17 @@ export default {
         }
       })
     },
-    getSongUrl(songId) {
-      return api.getSongUrl(songId)
+    getSongUrl(list) {
+      return new Promise((resolve) => {
+        list.forEach((item, index) => {
+          api.getSongUrl(item.id).then(res => {
+            if (res.data.code === 200) {
+              item.url = res.data.data[0].url
+            }
+          })
+        })
+        return resolve(list)
+      })
     },
     normalizeSongs(list) {
       console.log(list)
@@ -55,15 +64,23 @@ export default {
       list.forEach((item) => {
         ret.push(createSong(item))
       })
-      console.log(ret)
-      ret.forEach((item) => {
-        this.getSongUrl(item.id).then(res => {
-          if (res.data.code === 200) {
-            item.url = res.data.data[0].url
-          }
-        })
+      // console.log(ret)
+      // console.log(this.getSongUrl(ret))
+      this.getSongUrl(ret).then(value => {
+        setTimeout(() => {
+          this.deleteNull(value)
+        }, 1000)
       })
+      console.log(ret)
       return ret
+    },
+    deleteNull(list) {
+      let i = list.length
+      while (i--) {
+        if (list[i].url === null) {
+          list.splice(i, 1)
+        }
+      }
     }
   },
   components: {

@@ -17,8 +17,8 @@ export function createSong(songs) {
     duration: songs.dt,
     singer: filterSinger(songs.ar),
     album: songs.al.name,
-    image: songs.al.picUrl
-    // url: songUrl
+    image: songs.al.picUrl,
+    url: ''
   })
 }
 
