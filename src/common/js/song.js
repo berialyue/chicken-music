@@ -10,15 +10,15 @@ export default class Song {
   }
 }
 
-export function createSong(songs, songUrl) {
+export function createSong(songs) {
   return new Song({
     id: songs.id,
     name: songs.name,
     duration: songs.dt,
     singer: filterSinger(songs.ar),
     album: songs.al.name,
-    image: songs.al.picUrl,
-    url: songUrl
+    image: songs.al.picUrl
+    // url: songUrl
   })
 }
 
