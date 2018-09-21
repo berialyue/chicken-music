@@ -64,8 +64,6 @@ export default {
       list.forEach((item) => {
         ret.push(createSong(item))
       })
-      // console.log(ret)
-      // console.log(this.getSongUrl(ret))
       this.getSongUrl(ret).then(value => {
         setTimeout(() => {
           this.deleteNull(value)
