@@ -197,9 +197,12 @@ export default {
   },
   watch: {
     currentSong() {
-      this.$nextTick(() => {
+      // this.$nextTick(() => {
+      //   this.$refs.audio.play()
+      // })
+      setTimeout(() => {
         this.$refs.audio.play()
-      })
+      }, 1000)
     },
     playing(newPlaying) {
       const audio = this.$refs.audio
