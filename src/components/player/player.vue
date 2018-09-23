@@ -28,6 +28,11 @@
           </div>
         </div>
         <div class="bottom">
+          <div class="progress-wrapper">
+            <span class="time time-l">{{format(currentTime)}}</span>
+            <div class="progress-bar-wrapper"></div>
+            <span class="time time-r">{{format(currentSong.duration)}}</span>
+          </div>
           <div class="operators">
             <div class="icon i-left">
               <i class="icon-sequence"></i>
@@ -70,6 +75,7 @@
       :src="currentSong.url"
       @canplay="ready"
       @error="error"
+      @timeupdate="updateTime"
     ></audio>
   </div>
 </template>
@@ -85,7 +91,8 @@ export default {
   name: 'player',
   data() {
     return {
-      songReady: false
+      songReady: false,
+      currentTime: 0
     }
   },
   methods: {
@@ -128,6 +135,23 @@ export default {
     },
     error() {
       this.songReady = true
+    },
+    updateTime(e) {
+      this.currentTime = e.target.currentTime
+    },
+    format(interval) {
+      interval = interval | 0
+      const minute = interval / 60 | 0
+      const second = this.pad(interval % 60)
+      return `${minute}:${second}`
+    },
+    pad(num, n = 2) {
+      let len = num.toString().length
+      if (len < n) {
+        num = '0' + num
+        len++
+      }
+      return num
     },
     getPostAndScale() {
       const targetWidth = 40

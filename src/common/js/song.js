@@ -14,7 +14,7 @@ export function createSong(songs) {
   return new Song({
     id: songs.id,
     name: songs.name,
-    duration: songs.dt,
+    duration: songs.dt / 1000,
     singer: filterSinger(songs.ar),
     album: songs.al.name,
     image: songs.al.picUrl,
