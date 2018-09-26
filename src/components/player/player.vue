@@ -93,6 +93,7 @@ import progressBar from 'base/progressBar/progressBar'
 import progressCircle from 'base/progressCircle/progressCircle'
 import {playMode} from 'common/js/config'
 import {shuffle} from 'common/js/util'
+import Lyric from 'lyric-parser'
 
 const transform = prefixStyle('transform')
 
@@ -102,7 +103,8 @@ export default {
     return {
       songReady: false,
       currentTime: 0,
-      radius: 32
+      radius: 32,
+      currentLyric: null
     }
   },
   methods: {
@@ -258,6 +260,12 @@ export default {
       })
       this.setCurrentIndex(index)
     },
+    getLyric() {
+      this.currentSong.getLyric().then((lyric) => {
+        this.currentLyric = new Lyric(lyric)
+        console.log(this.currentLyric)
+      })
+    },
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
       setPlayingState: 'SET_PLAYING_STATE',
@@ -276,6 +284,7 @@ export default {
       }
       setTimeout(() => {
         this.$refs.audio.play()
+        this.getLyric()
       }, 1000)
     },
     playing(newPlaying) {

@@ -15,12 +15,5 @@ export default {
         id: singerId
       }
     })
-  },
-  getSongUrl(songId) {
-    return axios.get('/api/music/url', {
-      params: {
-        id: songId
-      }
-    })
   }
 }

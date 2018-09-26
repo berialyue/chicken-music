@@ -6,7 +6,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import api from 'api/singer'
+import singerAPI from 'api/singer'
+import songAPI from 'api/song'
 import { createSong } from 'common/js/song'
 import musicList from 'components/musicList/musicList'
 
@@ -39,7 +40,7 @@ export default {
         this.$router.push('/singer/list')
         return
       }
-      api.getSingerDetail(this.singers.id).then((res) => {
+      singerAPI.getSingerDetail(this.singers.id).then((res) => {
         console.log(res.data)
         if (res.data.code === 200) {
           this.songs = this.normalizeSongs(res.data.hotSongs)
@@ -49,7 +50,7 @@ export default {
     getSongUrl(list) {
       return new Promise((resolve) => {
         list.forEach((item, index) => {
-          api.getSongUrl(item.id).then(res => {
+          songAPI.getSongUrl(item.id).then(res => {
             if (res.data.code === 200) {
               item.url = res.data.data[0].url
             }
