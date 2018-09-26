@@ -1,3 +1,5 @@
+import songAPI from 'api/song'
+
 export default class Song {
   constructor({id, name, singer, album, duration, image, url}) {
     this.id = id
@@ -7,6 +9,22 @@ export default class Song {
     this.duration = duration
     this.image = image
     this.url = url
+  }
+
+  getLyric() {
+    if (this.lyric) {
+      return Promise.resolve(this.lyric)
+    }
+    return new Promise((resolve, reject) => {
+      songAPI.getLyric(this.id).then((res) => {
+        if (res.data.code === 200) {
+          this.lyric = res.data.lrc.lyric
+          resolve(this.lyric)
+        } else {
+          reject(new Error('no lyric'))
+        }
+      })
+    })
   }
 }
 
