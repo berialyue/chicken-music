@@ -26,6 +26,19 @@
               </div>
             </div>
           </div>
+          <scroll class="middle-r" ref="lyricList" :data="currentLyric && currentLyric.lines">
+            <div class="lyric-wrapper">
+              <div v-if="currentLyric">
+                <p
+                  ref="lyricLine"
+                  class="text"
+                  :class="{'current':currentLineNum === index}"
+                  v-for="(line,index) in currentLyric.lines"
+                  :key="index"
+                >{{line.txt}}</p>
+              </div>
+            </div>
+          </scroll>
         </div>
         <div class="bottom">
           <div class="progress-wrapper">
@@ -93,7 +106,8 @@ import progressBar from 'base/progressBar/progressBar'
 import progressCircle from 'base/progressCircle/progressCircle'
 import {playMode} from 'common/js/config'
 import {shuffle} from 'common/js/util'
-import Lyric from 'lyric-parser'
+import Lyric from 'common/js/lyric'
+import scroll from 'base/scroll/scroll'
 
 const transform = prefixStyle('transform')
 
@@ -104,7 +118,8 @@ export default {
       songReady: false,
       currentTime: 0,
       radius: 32,
-      currentLyric: null
+      currentLyric: null,
+      currentLineNum: 0
     }
   },
   methods: {
@@ -262,9 +277,20 @@ export default {
     },
     getLyric() {
       this.currentSong.getLyric().then((lyric) => {
-        this.currentLyric = new Lyric(lyric)
-        console.log(this.currentLyric)
+        this.currentLyric = new Lyric(lyric, this.handleLyric)
+        if (this.playing) {
+          this.currentLyric.play()
+        }
       })
+    },
+    handleLyric({lineNum, txt}) {
+      this.currentLineNum = lineNum
+      if (lineNum > 5) {
+        let lineEl = this.$refs.lyricLine[lineNum - 5]
+        this.$refs.lyricList.scrollToElement(lineEl, 1000)
+      } else {
+        this.$refs.lyricList.scrollToElement(0, 0, 1000)
+      }
     },
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
@@ -325,7 +351,8 @@ export default {
   },
   components: {
     progressBar,
-    progressCircle
+    progressCircle,
+    scroll
   }
 }
 </script>
