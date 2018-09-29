@@ -1,6 +1,6 @@
 <template>
-  <div class="recommend">
-    <scroll ref="scroll" class="recommend-content" :data="playList">
+  <div class="recommend" ref="recommend">
+    <scroll ref="scroll" class="recommend-content" :data="songSheet">
       <div>
         <div v-if="banners.length" class="slider-wrapper">
           <swiper
@@ -26,7 +26,7 @@
         <div class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
           <ul>
-            <li v-for="(item,index) in playList" :key="index" class="item">
+            <li v-for="(item,index) in songSheet" :key="index" class="item">
               <div class="icon">
                 <img v-lazy="item.coverImgUrl" width="60" height="60">
               </div>
@@ -37,7 +37,7 @@
           </ul>
         </div>
       </div>
-      <div class="loading-container" v-show="!playList.length">
+      <div class="loading-container" v-show="!songSheet.length">
         <loading></loading>
       </div>
     </scroll>
@@ -45,9 +45,10 @@
 </template>
 
 <script>
-import api from '../../api/recommend.js'
-import Scroll from '../../base/scroll/scroll'
-import Loading from '../../base/loading/loading'
+import api from 'api/recommend.js'
+import Scroll from 'base/scroll/scroll'
+import Loading from 'base/loading/loading'
+import {playListMixin} from 'common/js/mixin'
 
 export default {
   name: 'recommend',
@@ -67,10 +68,11 @@ export default {
         loop: true,
         observeParents: true
       },
-      playList: [],
+      songSheet: [],
       checkLoaded: false
     }
   },
+  mixins: [playListMixin],
   components: {
     Scroll,
     Loading
@@ -78,7 +80,7 @@ export default {
   created() {
     this.getBanner()
     this.getPersonalized()
-    this.getPlayList()
+    this.getSongSheet()
   },
   computed: {
     swiper() {
@@ -101,12 +103,12 @@ export default {
         }
       })
     },
-    getPlayList() {
-      api.getPlayList(10, 'new').then((res) => {
+    getSongSheet() {
+      api.getSongSheet(10, 'new').then((res) => {
         if (res.data.code === 200) {
           console.log(res)
           console.log(res.data)
-          this.playList = res.data.playlists
+          this.songSheet = res.data.playlists
         }
       })
     },
@@ -115,6 +117,11 @@ export default {
         this.$refs.scroll.refresh()
         this.checkLoaded = true
       }
+    },
+    handlePlayList(playList) {
+      const bottom = playList.length > 0 ? '60px' : ''
+      this.$refs.recommend.style.bottom = bottom
+      this.$refs.scroll.refresh()
     }
   }
 }

@@ -29,6 +29,11 @@
                 <img class="image" :src="currentSong.image">
               </div>
             </div>
+            <div class="playing-lyric-wrapper">
+              <div class="playing-lyric">
+                {{playingLyric}}
+              </div>
+            </div>
           </div>
           <scroll class="middle-r" ref="lyricList" :data="currentLyric && currentLyric.lines">
             <div class="lyric-wrapper">
@@ -129,7 +134,8 @@ export default {
       radius: 32,
       currentLyric: null,
       currentLineNum: 0,
-      currentShow: 'cd'
+      currentShow: 'cd',
+      playingLyric: ''
     }
   },
   methods: {
@@ -143,13 +149,17 @@ export default {
       if (!this.songReady) {
         return
       }
-      let index = this.currentIndex - 1
-      if (index === -1) {
-        index = this.playList.length - 1
-      }
-      this.setCurrentIndex(index)
-      if (!this.playing) {
-        this.togglePlaying()
+      if (this.playList.length === 1) {
+        this.loop()
+      } else {
+        let index = this.currentIndex - 1
+        if (index === -1) {
+          index = this.playList.length - 1
+        }
+        this.setCurrentIndex(index)
+        if (!this.playing) {
+          this.togglePlaying()
+        }
       }
       this.songReady = false
     },
@@ -157,13 +167,17 @@ export default {
       if (!this.songReady) {
         return
       }
-      let index = this.currentIndex + 1
-      if (index === this.playList.length) {
-        index = 0
-      }
-      this.setCurrentIndex(index)
-      if (!this.playing) {
-        this.togglePlaying()
+      if (this.playList.length === 1) {
+        this.loop()
+      } else {
+        let index = this.currentIndex + 1
+        if (index === this.playList.length) {
+          index = 0
+        }
+        this.setCurrentIndex(index)
+        if (!this.playing) {
+          this.togglePlaying()
+        }
       }
       this.songReady = false
     },
@@ -249,6 +263,9 @@ export default {
         return
       }
       this.setPlayingState(!this.playing)
+      if (this.currentLyric) {
+        this.currentLyric.togglePlay()
+      }
     },
     end() {
       if (this.mode === playMode.loop) {
@@ -260,11 +277,18 @@ export default {
     loop() {
       this.$refs.audio.currentTime = 0
       this.$refs.audio.play()
+      if (this.currentLyric) {
+        this.currentLyric.seek(0)
+      }
     },
     onProgressBarChange(percent) {
+      const currentTime = this.currentSong.duration * percent
       this.$refs.audio.currentTime = this.currentSong.duration * percent
       if (!this.playing) {
         this.togglePlaying()
+      }
+      if (this.currentLyric) {
+        this.currentLyric.seek(currentTime * 1000)
       }
     },
     changeMode() {
@@ -286,12 +310,18 @@ export default {
       this.setCurrentIndex(index)
     },
     getLyric() {
-      this.currentSong.getLyric().then((lyric) => {
-        this.currentLyric = new Lyric(lyric, this.handleLyric)
-        if (this.playing) {
-          this.currentLyric.play()
-        }
-      })
+      this.currentSong.getLyric()
+        .then((lyric) => {
+          this.currentLyric = new Lyric(lyric, this.handleLyric)
+          if (this.playing) {
+            this.currentLyric.play()
+          }
+        })
+        .catch(() => {
+          this.currentLyric = null
+          this.playingLyric = ''
+          this.currentLineNum = 0
+        })
     },
     handleLyric({lineNum, txt}) {
       this.currentLineNum = lineNum
@@ -301,6 +331,7 @@ export default {
       } else {
         this.$refs.lyricList.scrollTo(0, 0, 1000)
       }
+      this.playingLyric = txt
     },
     middleTouchStart(e) {
       this.touch.initiated = true
@@ -352,7 +383,7 @@ export default {
       this.$refs.lyricList.$el.style[transform] = `translate3d(${offsetWidth}px, 0, 0)`
       this.$refs.lyricList.$el.style[transitionDuration] = `${time}ms`
       this.$refs.middleL.style.opacity = opacity
-      this.$refs.middleL.style[transitionDuration] = `${time}ms`
+      this.$refs.middleL.style[transitionDuration] = 0
     },
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
@@ -367,11 +398,11 @@ export default {
   },
   watch: {
     currentSong(newSong, oldSong) {
-      // this.$nextTick(() => {
-      //   this.$refs.audio.play()
-      // })
       if (newSong.id === oldSong.id) {
         return
+      }
+      if (this.currentLyric) {
+        this.currentLyric.stop()
       }
       setTimeout(() => {
         this.$refs.audio.play()

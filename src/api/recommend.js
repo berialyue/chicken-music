@@ -7,7 +7,7 @@ export default {
   getPersonalizedResource() {
     return axios.get('/api/personalized')
   },
-  getPlayList(limit, tag) {
+  getSongSheet(limit, tag) {
     return axios.get('/api/top/playlist', {
       params: {
         limit: limit,

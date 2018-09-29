@@ -1,6 +1,10 @@
 <template>
-  <div class="singerItem">
-    <list-view @select="selectSinger" :data="singers"></list-view>
+  <div class="singerItem" ref='singer'>
+    <list-view
+      @select="selectSinger"
+      :data="singers"
+      ref="singerList"
+    ></list-view>
     <router-view></router-view>
   </div>
 </template>
@@ -10,6 +14,7 @@ import api from '../../../api/singer.js'
 import Singer from 'common/js/singer'
 import getFirstLetter from 'common/js/getFirstLetter.js'
 import ListView from 'base/listView/listView'
+import {playListMixin} from 'common/js/mixin'
 import { mapMutations } from 'vuex'
 
 const HOT_NAME = '热门'
@@ -26,6 +31,7 @@ export default {
   components: {
     ListView
   },
+  mixins: [playListMixin],
   props: {
     cat: {
       type: Number
@@ -38,6 +44,11 @@ export default {
     this.getSingerList()
   },
   methods: {
+    handlePlayList(playList) {
+      const bottom = playList.length > 0 ? '60px' : ''
+      this.$refs.singer.style.bottom = bottom
+      this.$refs.singerList.refresh()
+    },
     selectSinger(singer) {
       this.$router.push({
         path: `/singer/list/${singer.id}`
@@ -124,5 +135,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
+.singerItem
+  position: fixed
+  top: 88px
+  bottom: 0
+  width: 100%
 </style>
