@@ -6,7 +6,8 @@ import Search from 'components/search/search'
 import Singer from 'components/singer/singer'
 import singerClassify from 'src/components/singer/components/singerClassify'
 import singerList from 'src/components/singer/components/singerList'
-import singerDetail from 'src/components/singerDetail/singerDetail.vue'
+import singerDetail from 'src/components/singerDetail/singerDetail'
+import songSheet from 'src/components/songSheet/songSheet'
 
 Vue.use(Router)
 
@@ -19,7 +20,12 @@ export default new Router({
     {
       path: '/recommend',
       name: 'Recommend',
-      component: Recommend
+      component: Recommend,
+      children: [{
+        path: ':id',
+        name: 'songSheet',
+        component: songSheet
+      }]
     },
     {
       path: '/rank',
