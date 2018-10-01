@@ -7,9 +7,9 @@
 <script>
 import { mapGetters } from 'vuex'
 import singerAPI from 'api/singer'
-import songAPI from 'api/song'
 import { createSong } from 'common/js/song'
 import musicList from 'components/musicList/musicList'
+import {getSongUrl} from 'common/js/util'
 
 export default {
   name: 'singerDetail',
@@ -47,39 +47,15 @@ export default {
         }
       })
     },
-    getSongUrl(list) {
-      return new Promise((resolve) => {
-        list.forEach((item, index) => {
-          songAPI.getSongUrl(item.id).then(res => {
-            if (res.data.code === 200) {
-              item.url = res.data.data[0].url
-            }
-          })
-        })
-        return resolve(list)
-      })
-    },
     normalizeSongs(list) {
       console.log(list)
       let ret = []
       list.forEach((item) => {
         ret.push(createSong(item))
       })
-      this.getSongUrl(ret).then(value => {
-        setTimeout(() => {
-          this.deleteNull(value)
-        }, 1000)
-      })
+      getSongUrl(ret)
       console.log(ret)
       return ret
-    },
-    deleteNull(list) {
-      let i = list.length
-      while (i--) {
-        if (list[i].url === null) {
-          list.splice(i, 1)
-        }
-      }
     }
   },
   components: {

@@ -26,7 +26,12 @@
         <div class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
           <ul>
-            <li v-for="(item,index) in songSheet" :key="index" class="item">
+            <li
+              v-for="(item,index) in songSheet"
+              :key="index"
+              class="item"
+              @click="selectItem(item)"
+            >
               <div class="icon">
                 <img v-lazy="item.coverImgUrl" width="60" height="60">
               </div>
@@ -41,6 +46,7 @@
         <loading></loading>
       </div>
     </scroll>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -49,6 +55,7 @@ import api from 'api/recommend.js'
 import Scroll from 'base/scroll/scroll'
 import Loading from 'base/loading/loading'
 import {playListMixin} from 'common/js/mixin'
+import {mapMutations} from 'vuex'
 
 export default {
   name: 'recommend',
@@ -104,13 +111,20 @@ export default {
       })
     },
     getSongSheet() {
-      api.getSongSheet(10, 'new').then((res) => {
+      api.getSongSheet(10, 'hot').then((res) => {
         if (res.data.code === 200) {
           console.log(res)
           console.log(res.data)
           this.songSheet = res.data.playlists
         }
       })
+    },
+    selectItem(item) {
+      console.log(item)
+      this.$router.push({
+        path: `/recommend/${item.id}`
+      })
+      this.setSongSheet(item)
     },
     loadImage() {
       if (!this.checkLoaded) {
@@ -122,7 +136,10 @@ export default {
       const bottom = playList.length > 0 ? '60px' : ''
       this.$refs.recommend.style.bottom = bottom
       this.$refs.scroll.refresh()
-    }
+    },
+    ...mapMutations({
+      setSongSheet: 'SET_SONGSHEET'
+    })
   }
 }
 </script>
