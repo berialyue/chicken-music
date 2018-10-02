@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Recommend from 'components/recommend/recommend'
+import Hot from 'components/hot/hot'
 import Rank from 'components/rank/rank'
 import Search from 'components/search/search'
 import Singer from 'components/singer/singer'
@@ -15,12 +15,12 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/recommend'
+      redirect: '/hot'
     },
     {
-      path: '/recommend',
-      name: 'Recommend',
-      component: Recommend,
+      path: '/hot',
+      name: 'Hot',
+      component: Hot,
       children: [{
         path: ':id',
         name: 'songSheet',

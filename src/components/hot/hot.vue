@@ -1,6 +1,6 @@
 <template>
-  <div class="recommend" ref="recommend">
-    <scroll ref="scroll" class="recommend-content" :data="songSheet">
+  <div class="hot" ref="hot">
+    <scroll ref="scroll" class="hot-content" :data="songSheet">
       <div>
         <div v-if="banners.length" class="slider-wrapper">
           <swiper
@@ -23,8 +23,8 @@
           @click="startPlay"
         >开始</button> -->
         <!-- <button class="button" @click="stopPlay">停止</button> -->
-        <div class="recommend-list">
-          <h1 class="list-title">热门歌单推荐</h1>
+        <div class="hot-list">
+          <h1 class="list-title">热门歌单</h1>
           <ul>
             <li
               v-for="(item,index) in songSheet"
@@ -51,14 +51,14 @@
 </template>
 
 <script>
-import api from 'api/recommend.js'
+import api from 'api/hot.js'
 import Scroll from 'base/scroll/scroll'
 import Loading from 'base/loading/loading'
 import {playListMixin} from 'common/js/mixin'
 import {mapMutations} from 'vuex'
 
 export default {
-  name: 'recommend',
+  name: 'hot',
   data() {
     return {
       banners: [],
@@ -122,7 +122,7 @@ export default {
     selectItem(item) {
       console.log(item)
       this.$router.push({
-        path: `/recommend/${item.id}`
+        path: `/hot/${item.id}`
       })
       this.setSongSheet(item)
     },
@@ -134,7 +134,7 @@ export default {
     },
     handlePlayList(playList) {
       const bottom = playList.length > 0 ? '60px' : ''
-      this.$refs.recommend.style.bottom = bottom
+      this.$refs.hot.style.bottom = bottom
       this.$refs.scroll.refresh()
     },
     ...mapMutations({
@@ -148,12 +148,12 @@ export default {
   @import "~common/stylus/variable"
   .slider-wrapper >>> .swiper-pagination-bullet-active
     background: #ffffff
-  .recommend
+  .hot
     position: fixed
     width: 100%
     top: 88px
     bottom: 0
-    .recommend-content
+    .hot-content
       height: 100%
       overflow: hidden
       .slider-wrapper
@@ -170,7 +170,7 @@ export default {
         img
           display: block
           width: 100%
-      .recommend-list
+      .hot-list
         .list-title
           height: 65px
           line-height: 65px
