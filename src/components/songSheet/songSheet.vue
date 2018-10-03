@@ -7,7 +7,7 @@
 <script>
 import musicList from 'components/musicList/musicList'
 import {mapGetters} from 'vuex'
-import api from 'api/recommend.js'
+import api from 'api/hot.js'
 import { createSong } from 'common/js/song'
 import {getSongUrl} from 'common/js/util'
 
@@ -35,7 +35,7 @@ export default {
     },
     getSongSheetDetail() {
       if (!this.songSheet.id) {
-        this.$router.push('/recommend')
+        this.$router.push('/hot')
         return
       }
       api.getSongSheetDetail(this.songSheet.id).then((res) => {
