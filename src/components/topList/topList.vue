@@ -3,6 +3,7 @@
     <music-list
       :title="title"
       :bgImage="bgImage"
+      :songs="songs"
     ></music-list>
   </transition>
 </template>
@@ -10,15 +11,39 @@
 <script>
 import MusicList from 'components/musicList/musicList'
 import {mapGetters} from 'vuex'
+// import api from 'api/rank'
+import { createSong } from 'common/js/song'
+import {getSongUrl} from 'common/js/util'
 
 export default {
   name: 'topList',
+  data() {
+    return {
+      songs: []
+    }
+  },
+  created() {
+    this.getMusicList()
+  },
+  methods: {
+    getMusicList() {
+      this.songs = this.normalizeSongs(this.topList.tracks)
+    },
+    normalizeSongs(list) {
+      let ret = []
+      list.forEach((item) => {
+        ret.push(createSong(item))
+      })
+      getSongUrl(ret)
+      return ret
+    }
+  },
   computed: {
     title() {
       return this.topList.name
     },
     bgImage() {
-      return this.topList.coverImgUrl
+      return this.topList.tracks[0].al.picUrl
     },
     ...mapGetters([
       'topList'

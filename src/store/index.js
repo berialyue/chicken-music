@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import singer from './modules/singer'
 import player from './modules/player'
 import song from './modules/song'
+import rank from './modules/rank'
 import getters from './getters'
 import createLogger from 'vuex/dist/logger'
 
@@ -14,7 +15,8 @@ const store = new Vuex.Store({
   modules: {
     singer,
     player,
-    song
+    song,
+    rank
   },
   getters,
   strict: debug,
