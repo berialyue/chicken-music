@@ -10,6 +10,7 @@ const getters = {
   currentSong: (state) => {
     return state.player.playList[state.player.currentIndex] || {}
   },
-  songSheet: state => state.song.songSheet
+  songSheet: state => state.song.songSheet,
+  topList: state => state.rank.topList
 }
 export default getters

@@ -4,10 +4,11 @@ import Hot from 'components/hot/hot'
 import Rank from 'components/rank/rank'
 import Search from 'components/search/search'
 import Singer from 'components/singer/singer'
-import singerClassify from 'src/components/singer/components/singerClassify'
-import singerList from 'src/components/singer/components/singerList'
-import singerDetail from 'src/components/singerDetail/singerDetail'
-import songSheet from 'src/components/songSheet/songSheet'
+import singerClassify from 'components/singer/components/singerClassify'
+import singerList from 'components/singer/components/singerList'
+import singerDetail from 'components/singerDetail/singerDetail'
+import songSheet from 'components/songSheet/songSheet'
+import topList from 'components/topList/topList'
 
 Vue.use(Router)
 
@@ -30,7 +31,13 @@ export default new Router({
     {
       path: '/rank',
       name: 'Rank',
-      component: Rank
+      component: Rank,
+      children: [
+        {
+          path: ':id',
+          component: topList
+        }
+      ]
     },
     {
       path: '/search',
