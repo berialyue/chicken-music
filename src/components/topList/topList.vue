@@ -4,6 +4,7 @@
       :title="title"
       :bgImage="bgImage"
       :songs="songs"
+      :rank="rank"
     ></music-list>
   </transition>
 </template>
@@ -19,7 +20,8 @@ export default {
   name: 'topList',
   data() {
     return {
-      songs: []
+      songs: [],
+      rank: true
     }
   },
   created() {
@@ -27,6 +29,10 @@ export default {
   },
   methods: {
     getMusicList() {
+      if (!this.topList.id) {
+        this.$router.push('/rank')
+        return
+      }
       this.songs = this.normalizeSongs(this.topList.tracks)
     },
     normalizeSongs(list) {
@@ -43,7 +49,10 @@ export default {
       return this.topList.name
     },
     bgImage() {
-      return this.topList.tracks[0].al.picUrl
+      if (this.songs.length) {
+        return this.songs[0].image
+      }
+      return this.topList.coverImgUrl
     },
     ...mapGetters([
       'topList'
