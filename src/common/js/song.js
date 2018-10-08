@@ -18,7 +18,10 @@ export default class Song {
     return new Promise((resolve, reject) => {
       songAPI.getLyric(this.id).then((res) => {
         if (res.data.code === 200) {
-          if (res.data.lrc.lyric) {
+          if (res.data.nolyric || res.data.uncollected) {
+            this.lyric = 'noLyric'
+            console.log(this.lyric)
+          } else if (res.data.lrc.lyric) {
             this.lyric = res.data.lrc.lyric
           } else {
             this.lyric = ''
