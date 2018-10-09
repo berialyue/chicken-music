@@ -313,13 +313,10 @@ export default {
       this.currentSong.getLyric()
         .then((lyric) => {
           if (lyric === 'noLyric') {
-            console.log('222222222')
             this.currentLyric = null
             this.playingLyric = '该歌曲暂无歌词'
-            console.log(this.playingLyric)
             return
           }
-          console.log('111111111')
           this.currentLyric = new Lyric(lyric, this.handleLyric)
           if (this.playing) {
             this.currentLyric.play()

@@ -1,18 +1,65 @@
 <template>
   <div class="search">
     <div class="search-box-wrapper">
-      <search-box></search-box>
+      <search-box ref="searchBox" @query="onQueryChange"></search-box>
+    </div>
+    <div class="shortcut-wrapper" v-show="!query">
+      <div class="shortcut">
+        <div class="hot-key">
+          <h1 class="title">热门搜索</h1>
+          <ul>
+            <li
+              @click="addQuery(item.first)"
+              class="item"
+              v-for="(item, index) in hotKey"
+              :key="index">
+              <span>{{item.first}}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="search-result" v-show="query">
+      <suggest :query="query"></suggest>
     </div>
   </div>
 </template>
 
 <script>
 import searchBox from 'base/searchBox/searchBox'
+import suggest from 'components/suggest/suggest'
+import searchAPI from 'api/search'
 
 export default {
   name: 'search',
+  data() {
+    return {
+      hotKey: [],
+      query: ''
+    }
+  },
+  created() {
+    this.getHotSearch()
+  },
+  methods: {
+    getHotSearch() {
+      searchAPI.getHotSearch().then(res => {
+        if (res.data.code === 200) {
+          this.hotKey = res.data.result.hots
+          console.log(this.hotKey)
+        }
+      })
+    },
+    addQuery(query) {
+      this.$refs.searchBox.setQuery(query)
+    },
+    onQueryChange(query) {
+      this.query = query
+    }
+  },
   components: {
-    searchBox
+    searchBox,
+    suggest
   }
 }
 </script>
