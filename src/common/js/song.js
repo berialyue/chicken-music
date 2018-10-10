@@ -48,7 +48,19 @@ export function createSong(songs) {
   })
 }
 
-export function filterSinger(singer) {
+export function createSearchSong(songs) {
+  return new Song({
+    id: songs.id,
+    name: songs.name,
+    duration: songs.duration / 1000,
+    singer: filterSinger(songs.artists),
+    album: songs.album.name,
+    image: songs.album.artist.img1v1Url,
+    url: ''
+  })
+}
+
+function filterSinger(singer) {
   let ret = []
   if (!singer) {
     return ''
