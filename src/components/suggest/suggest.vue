@@ -3,7 +3,9 @@
     class="suggest"
     :data="result"
     :pullUp="pullUp"
+    :beforeScroll="beforeScroll"
     @scrollToEnd="searchMore"
+    @beforeScroll="listScroll"
     ref="suggest">
     <ul class="suggest-list">
       <li
@@ -47,7 +49,8 @@ export default {
       result: [],
       limit: 30,
       pullUp: true,
-      hasMore: true
+      hasMore: true,
+      beforeScroll: true
     }
   },
   props: {
@@ -140,6 +143,9 @@ export default {
       })
       getSongUrl(ret)
       return ret
+    },
+    listScroll() {
+      this.$emit('listScroll')
     },
     ...mapMutations({
       setSinger: 'SET_SINGERS'
