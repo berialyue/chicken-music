@@ -2,6 +2,7 @@
   <div class="search-box">
     <i class="icon-search"></i>
     <input
+      ref="query"
       :placeholder="placeholder"
       v-model="query"
       class="box">
@@ -30,6 +31,9 @@ export default {
     },
     setQuery(query) {
       this.query = query
+    },
+    blur() {
+      this.$refs.query.blur()
     }
   },
   created() {
