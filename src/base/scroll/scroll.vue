@@ -23,6 +23,10 @@ export default {
     listenScroll: {
       type: Boolean,
       default: false
+    },
+    pullUp: {
+      type: Boolean,
+      default: false
     }
   },
   mounted() {
@@ -33,7 +37,7 @@ export default {
   methods: {
     initScroll() {
       if (!this.$refs.wrapper) {
-        return undefined
+        return
       }
       this.$nextTick(() => {
         if (!this.scroll) {
@@ -45,6 +49,14 @@ export default {
             let that = this
             this.scroll.on('scroll', (pos) => {
               that.$emit('scroll', pos)
+            })
+          }
+          if (this.pullUp) {
+            this.scroll.on('scrollEnd', () => {
+              if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+                this.$emit('scrollToEnd')
+                console.log('scrollEnd')
+              }
             })
           }
         } else {

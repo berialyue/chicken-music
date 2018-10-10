@@ -1,7 +1,17 @@
 <template>
-  <div class="suggest">
+  <scroll
+    class="suggest"
+    :data="result"
+    :pullUp="pullUp"
+    @scrollToEnd="searchMore"
+    ref="suggest">
     <ul class="suggest-list">
-      <li class="suggest-item" v-for="(item, index) in result" :key="index">
+      <li
+        @click="selectItem(item)"
+        class="suggest-item"
+        v-for="(item, index) in result"
+        :key="index"
+      >
         <div class="icon">
           <i :class="getIconCls(item)"></i>
         </div>
@@ -9,13 +19,23 @@
           <p class="text" v-html="getDisplayName(item)"></p>
         </div>
       </li>
+      <loading v-show="hasMore" title=""></loading>
     </ul>
-  </div>
+    <div class="no-result-wrapper"  v-show="!hasMore && !result.length">
+      <no-result title="抱歉，暂无搜索结果"></no-result>
+    </div>
+  </scroll>
 </template>
 
 <script>
 import searchAPI from 'api/search'
-import {filterSinger} from 'common/js/song'
+import {createSearchSong} from 'common/js/song'
+import {getSongUrl} from 'common/js/util'
+import Scroll from 'base/scroll/scroll'
+import Loading from 'base/loading/loading'
+import Singer from 'common/js/singer'
+import {mapMutations, mapActions} from 'vuex'
+import noResult from 'base/noResult/noResult'
 
 const TYPE_SINGER = 'singer'
 
@@ -24,7 +44,10 @@ export default {
   data() {
     return {
       page: 1,
-      result: []
+      result: [],
+      limit: 30,
+      pullUp: true,
+      hasMore: true
     }
   },
   props: {
@@ -44,17 +67,55 @@ export default {
         ret.push({...data.result.artists[0], ...{type: TYPE_SINGER}})
       }
       if (data.result.songs) {
-        ret = ret.concat(data.result.songs)
+        ret = ret.concat(this.normalizeSongs(data.result.songs))
+        console.log(ret)
       }
       return ret
     },
+    checkMore(data) {
+      const song = data.result
+      if (!song.songs || (!song.songs.length || (song.songs.length + (this.page - 1) * this.limit) >= song.songCount)) {
+        this.hasMore = false
+      }
+    },
     search() {
-      searchAPI.getSearch(this.query, this.page).then(res => {
+      this.page = 1
+      this.$refs.suggest.scrollTo(0, 0)
+      this.hasMore = true
+      searchAPI.getSearch(this.query, this.page, this.limit).then(res => {
         if (res.data.code === 200) {
           console.log(res.data)
           this.result = this.genResult(res.data)
+          this.checkMore(res.data)
         }
       })
+    },
+    searchMore() {
+      if (!this.hasMore) {
+        return undefined
+      }
+      this.page++
+      searchAPI.getSearch(this.query, this.page, this.limit).then(res => {
+        if (res.data.code === 200) {
+          console.log(res.data)
+          this.result = this.result.concat(this.genResult(res.data))
+          this.checkMore(res.data)
+        }
+      })
+    },
+    selectItem(item) {
+      if (item.type === TYPE_SINGER) {
+        const singer = new Singer({
+          id: item.id,
+          name: item.name
+        })
+        this.$router.push({
+          path: `/search/${singer.id}`
+        })
+        this.setSinger(singer)
+      } else {
+        this.insertSong(item)
+      }
     },
     getIconCls(item) {
       if (item.type === TYPE_SINGER) {
@@ -67,14 +128,35 @@ export default {
       if (item.type === TYPE_SINGER) {
         return item.name
       } else {
-        return `${item.name}-${filterSinger(item.artists)}`
+        return `${item.name}-${item.singer}`
       }
-    }
+    },
+    normalizeSongs(list) {
+      let ret = []
+      list.forEach((musicData) => {
+        if (musicData.id && musicData.album.id) {
+          ret.push(createSearchSong(musicData))
+        }
+      })
+      getSongUrl(ret)
+      return ret
+    },
+    ...mapMutations({
+      setSinger: 'SET_SINGERS'
+    }),
+    ...mapActions([
+      'insertSong'
+    ])
   },
   watch: {
     query() {
       this.search()
     }
+  },
+  components: {
+    Scroll,
+    Loading,
+    noResult
   }
 }
 </script>
