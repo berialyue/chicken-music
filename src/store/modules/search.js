@@ -1,8 +1,8 @@
-import {saveSearch} from 'common/js/cache'
+import {saveSearch, loadSearch} from 'common/js/cache'
 
 const search = {
   state: {
-    searchHistory: []
+    searchHistory: loadSearch()
   },
   mutations: {
     SET_SEARCH_HISTORY: (state, searchHistory) => {
