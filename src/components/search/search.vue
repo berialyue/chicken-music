@@ -17,6 +17,19 @@
             </li>
           </ul>
         </div>
+        <div class="search-history" v-show="searchHistory.length">
+          <h1 class="title">
+            <span class="text">搜索历史</span>
+            <span class="clear" @click="deleteAll">
+              <i class="icon-clear"></i>
+            </span>
+          </h1>
+          <search-list
+            :searches="searchHistory"
+            @select="addQuery"
+            @delete="deleteOne"
+          ></search-list>
+        </div>
       </div>
     </div>
     <div class="search-result" v-show="query">
@@ -34,7 +47,8 @@
 import searchBox from 'base/searchBox/searchBox'
 import suggest from 'components/suggest/suggest'
 import searchAPI from 'api/search'
-import {mapActions} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
+import searchList from 'base/searchList/searchList'
 
 export default {
   name: 'search',
@@ -46,6 +60,11 @@ export default {
   },
   created() {
     this.getHotSearch()
+  },
+  computed: {
+    ...mapGetters([
+      'searchHistory'
+    ])
   },
   methods: {
     getHotSearch() {
@@ -68,13 +87,22 @@ export default {
     saveSearch() {
       this.saveSearchHistory(this.query)
     },
+    deleteOne(item) {
+      this.deleteSearchHistory(item)
+    },
+    deleteAll() {
+      this.clearSearchHistory()
+    },
     ...mapActions([
-      'saveSearchHistory'
+      'saveSearchHistory',
+      'deleteSearchHistory',
+      'clearSearchHistory'
     ])
   },
   components: {
     searchBox,
-    suggest
+    suggest,
+    searchList
   }
 }
 </script>

@@ -1,4 +1,4 @@
-import {saveSearch, loadSearch} from 'common/js/cache'
+import {saveSearch, loadSearch, deleteSearch, clearSearch} from 'common/js/cache'
 
 const search = {
   state: {
@@ -12,6 +12,12 @@ const search = {
   actions: {
     saveSearchHistory({commit}, query) {
       commit('SET_SEARCH_HISTORY', saveSearch(query))
+    },
+    deleteSearchHistory({commit}, query) {
+      commit('SET_SEARCH_HISTORY', deleteSearch(query))
+    },
+    clearSearchHistory({commit}) {
+      commit('SET_SEARCH_HISTORY', clearSearch())
     }
   }
 }
