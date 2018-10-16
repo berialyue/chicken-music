@@ -95,11 +95,12 @@
             <i :class="miniIcon" class="icon-mini" @click.stop="togglePlaying"></i>
           </progress-circle>
         </div>
-        <div class="control">
+        <div class="control" @click="showPlayList">
           <i class="icon-playlist"></i>
         </div>
       </div>
     </transition>
+    <play-list ref="playList"></play-list>
     <audio
       ref="audio"
       :src="currentSong.url"
@@ -121,6 +122,7 @@ import {playMode} from 'common/js/config'
 import {shuffle} from 'common/js/util'
 import Lyric from 'common/js/lyric'
 import scroll from 'base/scroll/scroll'
+import playList from 'components/playList/playList'
 
 const transform = prefixStyle('transform')
 const transitionDuration = prefixStyle('transitionDuration')
@@ -390,6 +392,9 @@ export default {
       this.$refs.middleL.style.opacity = opacity
       this.$refs.middleL.style[transitionDuration] = 0
     },
+    showPlayList() {
+      this.$refs.playList.show()
+    },
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
       setPlayingState: 'SET_PLAYING_STATE',
@@ -453,7 +458,8 @@ export default {
   components: {
     progressBar,
     progressCircle,
-    scroll
+    scroll,
+    playList
   }
 }
 </script>
