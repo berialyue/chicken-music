@@ -31,7 +31,6 @@ export default {
     ])
   },
   created() {
-    console.log(this.singers.id)
     this.getSingerDetail()
   },
   methods: {

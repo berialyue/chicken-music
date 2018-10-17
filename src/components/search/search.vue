@@ -58,7 +58,7 @@ import suggest from 'components/suggest/suggest'
 import searchAPI from 'api/search'
 import {mapActions, mapGetters} from 'vuex'
 import searchList from 'base/searchList/searchList'
-import confirm from 'base/comfirm/confirm'
+import confirm from 'base/confirm/confirm'
 import Scroll from 'base/scroll/scroll'
 import {playListMixin} from 'common/js/mixin'
 
