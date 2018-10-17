@@ -96,6 +96,7 @@ const player = {
       commit('SET_FULL_SCREEN', true)
       commit('SET_PLAYING_STATE', true)
     }
+
   }
 }
 
