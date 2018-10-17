@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default {
   getSongUrl(songId) {
-    return axios.get('/api/music/url', {
+    return axios.get('/api/song/url', {
       params: {
         id: songId
       }

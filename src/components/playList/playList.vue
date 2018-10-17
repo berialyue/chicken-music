@@ -11,20 +11,26 @@
             </span>
           </h1>
         </div>
-        <div class="list-content">
+        <scroll class="list-content" :data="sequenceList" ref="listContent">
           <ul>
-            <li class="item">
-              <i class="current"></i>
-              <span class="text"></span>
+            <li
+              class="item"
+              v-for="(item, index) in sequenceList"
+              :key="index"
+              @click="selectItem(item, index)"
+              ref="listItem"
+            >
+              <i class="current" :class="getCurrentIcon(item)"></i>
+              <span class="text">{{item.name}}</span>
               <span class="like">
                 <i class="icon-not-favorite"></i>
               </span>
-              <span class="delete">
+              <span class="delete" @click="deleteOne(item)">
                 <i class="icon-delete"></i>
               </span>
             </li>
           </ul>
-        </div>
+        </scroll>
         <div class="list-operate">
           <div class="add">
             <i class="icon-add"></i>
@@ -40,6 +46,10 @@
 </template>
 
 <script>
+import {mapGetters, mapMutations} from 'vuex'
+import Scroll from 'base/scroll/scroll'
+import {playMode} from 'common/js/config'
+
 export default {
   name: 'playList',
   data() {
@@ -47,13 +57,64 @@ export default {
       showFlag: false
     }
   },
+  computed: {
+    ...mapGetters([
+      'sequenceList',
+      'currentSong',
+      'playList',
+      'mode'
+    ])
+  },
   methods: {
     show() {
       this.showFlag = true
+      setTimeout(() => {
+        this.$refs.listContent.refresh()
+        this.scrollToCurrent(this.currentSong)
+      }, 20)
     },
     hide() {
       this.showFlag = false
+    },
+    getCurrentIcon(item) {
+      if (this.currentSong.id === item.id) {
+        return 'icon-play'
+      }
+      return ''
+    },
+    selectItem(item, index) {
+      if (this.mode === playMode.random) {
+        index = this.playList.findIndex((song) => {
+          return song.id === item.id
+        })
+      }
+      this.setCurrentIndex(index)
+      this.setPlayingState(true)
+    },
+    scrollToCurrent(current) {
+      const index = this.sequenceList.findIndex((song) => {
+        return current.id === song.id
+      })
+      this.$refs.listContent.scrollToElement(this.$refs.listItem[index], 300)
+    },
+    deleteOne(item) {
+
+    },
+    ...mapMutations({
+      setCurrentIndex: 'SET_CURRENT_INDEX',
+      setPlayingState: 'SET_PLAYING_STATE'
+    })
+  },
+  watch: {
+    currentSong(newSong, oldSong) {
+      if (!this.showFlag || newSong.id === oldSong.id) {
+        return undefined
+      }
+      this.scrollToCurrent(newSong)
     }
+  },
+  components: {
+    Scroll
   }
 }
 </script>
@@ -111,14 +172,14 @@ export default {
         display: flex
         align-items: center
         height: 40px
-        padding: 0 30px 20px
+        padding: 0 30px 0 20px
         overflow: hidden
         &list-enter-active, &list-leave-active
           transition: all 0.1s
         &list-enter,&list-leave-to
           height: 0
         .current
-          flex: 0 0 20px
+          flex: 0 0 20px 0
           width: 20px
           font-size: $font-size-small
           color: $color-theme-d
@@ -140,7 +201,7 @@ export default {
           color: $color-theme
     .list-operate
       width: 160px
-      margin: 20px auto 30px
+      margin: 20px auto 30px auto
       .add
         display: flex
         align-items: center
