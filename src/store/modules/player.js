@@ -114,6 +114,8 @@ const player = {
       commit('SET_CURRENT_INDEX', currentIndex)
       if (!playList.length) {
         commit('SET_PLAYING_STATE', false)
+      } else {
+        commit('SET_PLAYING_STATE', true)
       }
     }
   }
