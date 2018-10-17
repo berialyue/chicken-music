@@ -16,18 +16,20 @@ export function shuffle(arr) {
 }
 
 export function deleteNull(list) {
-  let i = list.length
+  let arr = list.slice()
+  let i = arr.length
   while (i--) {
-    if (list[i].url === null) {
-      list.splice(i, 1)
+    if (arr[i].url === null) {
+      arr.splice(i, 1)
     }
   }
-  return list
+  return arr
 }
 
 export function getSongUrl(list) {
+  let arr = list.slice()
   let flag = 0
-  list.forEach((item, index, array) => {
+  arr.forEach((item, index, array) => {
     songAPI.getSongUrl(item.id).then(res => {
       if (res.data.code === 200) {
         item.url = res.data.data[0].url
@@ -38,7 +40,7 @@ export function getSongUrl(list) {
       }
     })
   })
-  return list
+  return arr
 }
 
 export function debounce(func, delay) {

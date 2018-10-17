@@ -112,11 +112,15 @@ const player = {
       commit('SET_PLAYLIST', playList)
       commit('SET_SEQUENCE_LIST', sequenceList)
       commit('SET_CURRENT_INDEX', currentIndex)
-      if (!playList.length) {
-        commit('SET_PLAYING_STATE', false)
-      } else {
-        commit('SET_PLAYING_STATE', true)
-      }
+
+      const playingState = playList.length > 0
+      commit('SET_PLAYING_STATE', playingState)
+    },
+    deleteSongList({commit}) {
+      commit('SET_PLAYLIST', [])
+      commit('SET_SEQUENCE_LIST', [])
+      commit('SET_CURRENT_INDEX', -1)
+      commit('SET_PLAYING_STATE', false)
     }
   }
 }
