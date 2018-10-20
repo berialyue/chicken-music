@@ -12,6 +12,7 @@ const getters = {
   },
   songSheet: state => state.song.songSheet,
   topList: state => state.rank.topList,
-  searchHistory: state => state.search.searchHistory
+  searchHistory: state => state.search.searchHistory,
+  playHistory: state => state.player.playHistory
 }
 export default getters

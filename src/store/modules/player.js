@@ -1,5 +1,6 @@
 import { playMode } from 'common/js/config'
 import {shuffle} from 'common/js/util'
+import {savePlay, loadPlay} from 'common/js/cache'
 
 const player = {
   state: {
@@ -8,7 +9,8 @@ const player = {
     playList: [],
     sequenceList: [],
     mode: playMode.sequence,
-    currentIndex: -1
+    currentIndex: -1,
+    playHistory: loadPlay()
   },
   mutations: {
     SET_PLAYING_STATE: (state, playing) => {
@@ -28,6 +30,9 @@ const player = {
     },
     SET_CURRENT_INDEX: (state, currentIndex) => {
       state.currentIndex = currentIndex
+    },
+    SET_PLAY_HISTORY: (state, playHistory) => {
+      state.playHistory = playHistory
     }
   },
   actions: {
@@ -121,6 +126,9 @@ const player = {
       commit('SET_SEQUENCE_LIST', [])
       commit('SET_CURRENT_INDEX', -1)
       commit('SET_PLAYING_STATE', false)
+    },
+    savePlayHistory({commit}, song) {
+      commit('SET_PLAY_HISTORY', savePlay(song))
     }
   }
 }
