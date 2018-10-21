@@ -9,6 +9,7 @@ import singerList from 'components/singer/components/singerList'
 import singerDetail from 'components/singerDetail/singerDetail'
 import songSheet from 'components/songSheet/songSheet'
 import topList from 'components/topList/topList'
+import userCenter from 'components/userCenter/userCenter'
 
 Vue.use(Router)
 
@@ -64,6 +65,11 @@ export default new Router({
           component: singerDetail
         }]
       }]
+    },
+    {
+      path: '/user',
+      name: 'userCenter',
+      component: userCenter
     }
   ]
 })
