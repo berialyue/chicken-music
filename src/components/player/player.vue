@@ -108,7 +108,7 @@
     <audio
       ref="audio"
       :src="currentSong.url"
-      @canplay="ready"
+      @play="ready"
       @error="error"
       @timeupdate="updateTime"
       @ended="end"
@@ -160,6 +160,7 @@ export default {
       }
       if (this.playList.length === 1) {
         this.loop()
+        return
       } else {
         let index = this.currentIndex - 1
         if (index === -1) {
@@ -178,6 +179,7 @@ export default {
       }
       if (this.playList.length === 1) {
         this.loop()
+        return
       } else {
         let index = this.currentIndex + 1
         if (index === this.playList.length) {
@@ -304,6 +306,9 @@ export default {
     getLyric() {
       this.currentSong.getLyric()
         .then((lyric) => {
+          if (this.currentSong.lyric !== lyric) {
+            return
+          }
           if (lyric === 'noLyric') {
             this.currentLyric = null
             this.playingLyric = '该歌曲暂无歌词'
@@ -406,7 +411,8 @@ export default {
       if (this.currentLyric) {
         this.currentLyric.stop()
       }
-      setTimeout(() => {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
         this.getLyric()
         this.$refs.audio.play()
       }, 1000)
