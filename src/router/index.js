@@ -1,15 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hot from 'components/hot/hot'
-import Rank from 'components/rank/rank'
-import Search from 'components/search/search'
-import Singer from 'components/singer/singer'
-import singerClassify from 'components/singer/components/singerClassify'
-import singerList from 'components/singer/components/singerList'
-import singerDetail from 'components/singerDetail/singerDetail'
-import songSheet from 'components/songSheet/songSheet'
-import topList from 'components/topList/topList'
-import userCenter from 'components/userCenter/userCenter'
 
 Vue.use(Router)
 
@@ -22,54 +12,54 @@ export default new Router({
     {
       path: '/hot',
       name: 'Hot',
-      component: Hot,
+      component: () => import('../components/hot/hot.vue'),
       children: [{
         path: ':id',
         name: 'songSheet',
-        component: songSheet
+        component: () => import('../components/songSheet/songSheet.vue')
       }]
     },
     {
       path: '/rank',
       name: 'Rank',
-      component: Rank,
+      component: () => import('../components/rank/rank.vue'),
       children: [
         {
           path: ':id',
-          component: topList
+          component: () => import('../components/topList/topList.vue')
         }
       ]
     },
     {
       path: '/search',
       name: 'Search',
-      component: Search,
+      component: () => import('../components/search/search.vue'),
       children: [{
         path: ':id',
-        component: singerDetail
+        component: () => import('../components/singerDetail/singerDetail.vue')
       }]
     },
     {
       path: '/singer',
-      component: Singer,
+      component: () => import('../components/singer/singer.vue'),
       children: [{
         path: '',
         name: 'singerClassify',
-        component: singerClassify
+        component: () => import('../components/singer/components/singerClassify.vue')
       }, {
         path: 'list',
         name: 'singerList',
-        component: singerList,
+        component: () => import('../components/singer/components/singerList.vue'),
         children: [{
           path: ':id',
-          component: singerDetail
+          component: () => import('../components/singerDetail/singerDetail.vue')
         }]
       }]
     },
     {
       path: '/user',
       name: 'userCenter',
-      component: userCenter
+      component: () => import('../components/userCenter/userCenter.vue')
     }
   ]
 })
